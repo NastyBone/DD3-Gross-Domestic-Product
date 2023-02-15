@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Fork Me! FCC: Test Suite Template</title>
+  <link rel="stylesheet" href="./style.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<!DOCTYPE html>
+<html>
+  <head>
+    <script src="https://d3js.org/d3.v5.min.js"></script>
+
+    <title>D3 Data Visualization Proyect</title>
+  </head> 
+  
+  <body>
+    <script>
+    
+     
+    document.addEventListener('DOMContentLoaded', () => {
+      var dataTest = [];
+      var dataDate = [];
+      var dateBar = [];
+      
+      const putInto = (date) => {
+        
+        
+      }
+      var reg = /\d+/
+       var request = new XMLHttpRequest();
+  request.open('GET','https://raw.githubusercontent.com/freeCodeCamp/ProjectReferenceData/master/GDP-data.json',true);
+          request.send();
+          request.onload= function(){
+      var data = JSON.parse(request.responseText);
+      data.data.map((value,i) => {
+        
+        dataTest[i] = value[1]
+        dataDate[i] = new Date(value[0])
+        dateBar[i] = value[0]
+        
+        
+      })
+  const padding = 25;
+  const h = 300 + padding ;  
+  const w = 800 + padding;  
+      
+const xScale = d3.scaleBand()
+       .domain(dataTest.map((d,i) =>d))
+       .range([0,w - padding - padding - padding])
+                        
+const xAxisScale = d3.scaleTime()
+       .domain([d3.min(dataDate),d3.max(dataDate)])
+       .range([0,w - padding - padding - padding])
+
+
+    const yScale = d3.scaleLinear()
+       .domain([0, d3.max(dataTest, (d,i) => d)])
+       .range([0,h - padding])
+
+    const yAxisScale = d3.scaleLinear()
+       .domain([0, d3.max(dataTest, (d,i) => d)])
+       .range([ h-padding ,0])
+
+            
+  const svg = d3.select('#container')
+              .append('svg')
+              .attr('height', h)
+              .attr('width',  w )   
+              
+const tooltip = d3.select('body')
+                .append('div')
+              
+.attr('id','tooltip')
+
+
+  
+            
+  
+svg.selectAll('rect')
+    .data(dataTest)
+    .enter()
+    .append('rect')
+    .attr('class','bar')
+    .attr('x',(d,i) => xScale(d) + padding + padding)
+    .attr('y', (d,i) =>  h - yScale(d,i) - padding )
+    .attr('width', (d,i)=> xScale.bandwidth())
+    .attr('height', (d,i) =>yScale(d,i))
+    .attr('data-gdp', (d,i) => dataTest[i])
+    .attr('data-date', (d,i) => dateBar[i])
+    .attr('key',(d,i) => i)
+    .on('mouseover', (d,i) => {
+    tooltip.transition()
+            .duration(200)
+            .style('opacity',1)
+   tooltip.html('GDP: ' + dataTest[i] + '<br/>' + 'Date: ' + dateBar[i])
+  .style('left', d3.event.pageX + 15 +'px')
+  .style('top', d3.event.pageY - 30 + 'px')
+  .attr('data-date', dateBar[i])
+  
+})
+   .on('mouseout', () => {tooltip.transition()
+                                  .duration(300)
+                                  .style('opacity',0)})
+    
+
+ const xAxis = d3.axisBottom(xAxisScale)
+ const yAxis = d3.axisLeft(yAxisScale)
+      
+svg.append('g')
+ .attr("transform", `translate(${padding + padding},0)`)
+ .attr('id','y-axis')
+ .call(yAxis)
+   
+      
+ svg.append('g')
+  .attr("transform", `translate(${padding + padding},${h-padding})`)
+  .attr('id','x-axis')
+  .call(xAxis)
+      
+            
+           
+      
+      
+      
+     
+      
+      }  
+      })
+    </script>
+    
+    <h2 id = 'title'>GROSS DOMESTIC PRODCT BY YEAR IN USA</h2>
+  <div id = 'container'></div>
+    
+  
+  
+  </body>
+  
+
+  
+  
+</html>
+<!-- partial -->
+  <script src='https://cdn.freecodecamp.org/testable-projects-fcc/v1/bundle.js'></script>
+<script src='https://d3js.org/d3.v5.min.js'></script><script  src="./script.js"></script>
+
+</body>
+</html>
